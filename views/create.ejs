@@ -13,7 +13,6 @@
                     <div class="col-md-10 col-lg-8 col-xl-7">
                         <div class="page-heading">
                             <h1>Create New Post</h1>
-                            <span class="subheading">Have questions? I have answers.</span>
                         </div>
                     </div>
                 </div>
@@ -32,8 +31,8 @@
                             <!-- To make this form functional, sign up at-->
                             <!-- https://startbootstrap.com/solution/contact-forms-->
                             <!-- to get an API token!-->
-                            <form id="newPostForm" name="newPostForm"
-                                  action="/posts/store" method="POST">
+                            <form action="/posts/store" method="POST"
+                                  enctype="multipart/form-data">
                                 <div class="form-floating">
                                     <input class="form-control" id="title" name="title" type="text" placeholder="Enter your title..." data-sb-validations="required" />
                                     <label for="name">Title</label>
@@ -43,6 +42,11 @@
                                     <textarea class="form-control" id="body" name="body" placeholder="Enter your post here..." style="height: 12rem" data-sb-validations="required"></textarea>
                                     <label for="body">Body</label>
                                     <div class="invalid-feedback" data-sb-feedback="body:required">A body is required.</div>
+                                </div>
+                                <div class="form-floating">
+                                    <label for="image"></label>
+                                    <input class="form-control" id="image" name="image" type="file" data-sb-validations="required" />
+                                    <div class="invalid-feedback" data-sb-feedback="image:required">An image is required.</div>
                                 </div>
                                 <br />
                                 <!-- Submit success message-->
@@ -63,7 +67,7 @@
                                 <!-- an error submitting the form-->
                                 <div class="d-none" id="submitErrorMessage"><div class="text-center text-danger mb-3">Error sending message!</div></div>
                                 <!-- Submit Button-->
-                                <button class="btn btn-primary text-uppercase disabled" id="submitButton" type="submit">Send</button>
+                                <button class="btn btn-primary text-uppercase" id="submitButton" type="submit">Send</button>
                             </form>
                         </div>
                     </div>
@@ -75,11 +79,5 @@
 
         <!-- Scripts -->
         <%- include('layouts/header') -%>
-
-        <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
-        <!-- * *                               SB Forms JS                               * *-->
-        <!-- * * Activate your form at https://startbootstrap.com/solution/contact-forms * *-->
-        <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
-        <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
-    </body>
+</body>
 </html>

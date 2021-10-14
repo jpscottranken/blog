@@ -1,16 +1,17 @@
-const path = require('path');
 const express = require('express');
 const mongoose = require('mongoose');
 const ejs = require('ejs');
-const bodyParser = require('body-parser');
-const { reset } = require('nodemon');
+const fileUpload = require('express-fileupload');
 const port = process.env.PORT || 8888;
 const app = express();
+const validationMiddleware = require('./middleware/validationMiddleware');
 
 //  Add middleware
 app.use(express.static('public'));
 app.use(express.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(fileUpload());
+app.use(express.urlencoded({extended: true}));
+app.use('/posts/store', validationMiddleware);
 
 //  Set view engine
 app.set('view engine', 'ejs');
@@ -18,46 +19,18 @@ app.set('view engine', 'ejs');
 //  Connect to Mongoose
 mongoose.connect('mongodb://localhost:27017/blogdb');
 
-const BlogPost = require('./models/BlogPost');
-
 //  Start creating routes
-app.get('/', async(req, res) => {
-    const blogposts = await BlogPost.find({});
-    res.render('index', {
-        blogposts
-    });
-});
+const homeController        = require('./controllers/homeController');
+const postController        = require('./controllers/postController');
+const showOnePostController = require('./controllers/showOnePostController');
+const newPostController     = require('./controllers/newPostController');
+const storePostController   = require('./controllers/storePostController');
 
-app.get('/about', (req, res) => {
-    res.render('about');
-});
-
-app.get('/posts', (req, res) => {
-    res.render('post');
-});
-
-app.get('/post/:id', async(req, res) => {
-    const blogpost = await BlogPost.findById(req.params.id);
-    res.render('post', {
-        blogpost
-    });
-});
-
-app.get('/contact', (req, res) => {
-    res.render('contact');
-});
-
-app.get('/posts/new', (req, res) => {
-    res.render('create');
-    createPost: true;
-});
-
-app.post('/posts/store', async (req, res) => {
-    //console.log(req.body);
-    await BlogPost.create(req.body, (err, blogpost) => {
-        res.redirect("/")
-    });
-});
+app.get('/post', postController);
+app.get('/', homeController);
+app.get('/post/:id', showOnePostController);
+app.get('/posts/new', newPostController);
+app.post('/posts/store', storePostController);
 
 app.listen(port, () => {
     console.log(`App up and running on port ${port}`);
