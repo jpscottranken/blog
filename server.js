@@ -5,6 +5,9 @@ const fileUpload = require('express-fileupload');
 const port = process.env.PORT || 8888;
 const app = express();
 const validationMiddleware = require('./middleware/validationMiddleware');
+const authUserMiddleware = require('./middleware/authUserMiddleware');
+const userNotAuthenticatedMiddleware = require('./middleware/userNotAuthenticatedMiddleware');
+const expressSession = require('express-session');
 //const bcrypt = require('bcrypt');
 
 //  Add middleware
@@ -13,6 +16,16 @@ app.use(express.json());
 app.use(fileUpload());
 app.use(express.urlencoded({extended: true}));
 app.use('/posts/store', validationMiddleware);
+app.use(expressSession({
+     secret: 'secretkey'
+}));
+
+global.loggedIn = null;
+
+app.use("*", (req, res, next) => {
+    loggedIn = req.session.userId;
+    next();
+});
 
 //  Set view engine
 app.set('view engine', 'ejs');
@@ -30,16 +43,22 @@ const newUserController     = require('./controllers/newUserController');
 const storeUserController   = require('./controllers/storeUserController');
 const loginController       = require('./controllers/loginController');
 const loginUserController   = require('./controllers/loginUserController');
+const logoutController      = require('./controllers/logoutController');
 
 app.get('/', homeController);
 app.get('/post', postController);
 app.get('/post/:id', showOnePostController);
-app.get('/posts/new', newPostController);
-app.post('/posts/store', storePostController);
-app.get('/auth/register', newUserController);
-app.post('/users/register', storeUserController);
-app.get('/auth/login', loginController);
-app.post('/users/login', loginUserController);
+app.get('/posts/new', authUserMiddleware, newPostController);
+app.post('/posts/store', authUserMiddleware, storePostController);
+app.get('/auth/register', userNotAuthenticatedMiddleware, newUserController);
+app.post('/users/register', userNotAuthenticatedMiddleware, storeUserController);
+app.get('/auth/login', userNotAuthenticatedMiddleware, loginController);
+app.post('/users/login', userNotAuthenticatedMiddleware, loginUserController);
+app.get('/auth/logout', logoutController);
+
+app.use((req, res) => {
+    res.render('notfound');
+});
 
 app.listen(port, () => {
     console.log(`App up and running on port ${port}`);
