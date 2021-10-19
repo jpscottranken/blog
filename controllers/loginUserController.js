@@ -6,7 +6,7 @@ module.exports = (req, res) => {
     const {username, password} = req.body;
 
     User.findOne({username: username}, (error, user) => {
-        if (username) { //  This username was found
+        if (user) { //  This username was found
             bcrypt.compare(password, user.password, (error, match) => {
                 if (match) {
                     //  Assign userID to the session

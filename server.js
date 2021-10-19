@@ -8,7 +8,7 @@ const validationMiddleware = require('./middleware/validationMiddleware');
 const authUserMiddleware = require('./middleware/authUserMiddleware');
 const userNotAuthenticatedMiddleware = require('./middleware/userNotAuthenticatedMiddleware');
 const expressSession = require('express-session');
-//const bcrypt = require('bcrypt');
+const flash = require('connect-flash');
 
 //  Add middleware
 app.use(express.static('public'));
@@ -17,10 +17,13 @@ app.use(fileUpload());
 app.use(express.urlencoded({extended: true}));
 app.use('/posts/store', validationMiddleware);
 app.use(expressSession({
-     secret: 'secretkey'
+     secret: 'secretkey2'
 }));
 
+app.use(flash());
+
 global.loggedIn = null;
+global.errors = null;
 
 app.use("*", (req, res, next) => {
     loggedIn = req.session.userId;
@@ -31,7 +34,7 @@ app.use("*", (req, res, next) => {
 app.set('view engine', 'ejs');
 
 //  Connect to Mongoose
-mongoose.connect('mongodb://localhost:27017/blogdb');
+mongoose.connect('mongodb+srv://user1:iFL4mA4jRSGGYWHg@sandbox.xd2pm.mongodb.net/blog');
 
 //  Start creating routes
 const homeController        = require('./controllers/homeController');

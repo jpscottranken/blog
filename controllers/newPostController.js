@@ -1,10 +1,9 @@
-const BlogPost = require('../models/BlogPost');
-
-module.exports =  ((req, res) => {
+module.exports =  (req, res) => {
     if(req.session.userId) {
-        res.render('create');
-        //createPost: true;
+        return res.render('create', {
+            createPost:true
+        });
     }
 
     res.redirect('/auth/login');
-});
+};

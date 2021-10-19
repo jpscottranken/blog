@@ -24,44 +24,59 @@
                 <div class="row gx-4 gx-lg-5 justify-content-center">
                     <div class="col-md-10 col-lg-8 col-xl-7">
                         <div class="my-5">
-                            <!-- * * * * * * * * * * * * * * *-->
-                            <!-- * * SB Forms Contact Form * *-->
-                            <!-- * * * * * * * * * * * * * * *-->
-                            <!-- This form is pre-integrated with SB Forms.-->
-                            <!-- To make this form functional, sign up at-->
-                            <!-- https://startbootstrap.com/solution/contact-forms-->
-                            <!-- to get an API token!-->
+                            <% if ((errors !== null) && (errors.length > 0)) { %>
+                                <ul class="list-group">
+                                    <% for (let lcv = 0; lcv < errors.length; ++lcv) { %>
+                                        <li class="list-group-item list-group-item-danger">
+                                            <%= errors[lcv] %>
+                                        </li>
+                                    <% } %>
+                                </ul>
+                            <% } %>
                             <form action="/users/register" method="POST">
                                 <div class="form-floating">
-                                    <input class="form-control" id="username" name="username" type="text" data-sb-validations="required" />
+                                    <input class="form-control" 
+                                           id="username" 
+                                           name="username" 
+                                           value="<%= username %>"
+                                           type="text" 
+                                           data-sb-validations="required" />
                                     <label for="username">Username</label>
                                     <div class="invalid-feedback" data-sb-feedback="username:required">A username is required.</div>
                                 </div>
                                 <div class="form-floating">
-                                    <input class="form-control" id="password" name="password" type="password" data-sb-validations="required" />
+                                    <input class="form-control" 
+                                           id="password" 
+                                           name="password"          
+                                           value="<%= password %>"
+                                           type="password" 
+                                           data-sb-validations="required" />
                                     <label for="password">Password</label>
                                     <div class="invalid-feedback" data-sb-feedback="password:required">A password is required.</div>
                                 </div>
                                 <br />
-                                <!-- Submit success message-->
-                                <!---->
-                                <!-- This is what your users will see when the form-->
-                                <!-- has successfully submitted-->
                                 <div class="d-none" id="submitSuccessMessage">
                                     <div class="text-center mb-3">
-                                        <div class="fw-bolder">Form submission successful!</div>
+                                        <div class="fw-bolder">
+                                            Form submission successful!
+                                        </div>
                                         To activate this form, sign up at
                                         <br />
                                         <a href="https://startbootstrap.com/solution/contact-forms">https://startbootstrap.com/solution/contact-forms</a>
                                     </div>
                                 </div>
-                                <!-- Submit error message-->
-                                <!---->
-                                <!-- This is what your users will see when there is-->
-                                <!-- an error submitting the form-->
-                                <div class="d-none" id="submitErrorMessage"><div class="text-center text-danger mb-3">Error sending message!</div></div>
+                                <div class="d-none" 
+                                     id="submitErrorMessage">
+                                     <div class="text-center text-danger mb-3">
+                                         Error sending message!
+                                     </div>
+                                </div>
                                 <!-- Submit Button-->
-                                <button class="btn btn-primary text-uppercase" id="submitButton" type="submit">Send</button>
+                                <button class="btn btn-primary text-uppercase" 
+                                        id="submitButton" 
+                                        type="submit">
+                                        Send
+                                </button>
                             </form>
                         </div>
                     </div>
